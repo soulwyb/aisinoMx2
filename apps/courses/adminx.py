@@ -1,6 +1,8 @@
 # encoding:utf-8
 __author__ = 'wuyubin'
 __date__ = '2018-09-25 13:53'
+
+
 import xadmin
 
 from .models import Course, Lesson, Video, CourseResource
@@ -55,3 +57,4 @@ xadmin.site.register(Course, CourseAdmin)
 xadmin.site.register(Lesson, LessonAdmin)
 xadmin.site.register(Video, VideoAdmin)
 xadmin.site.register(CourseResource, CourseResourceAdmin)
+
