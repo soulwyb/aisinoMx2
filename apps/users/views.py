@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.views.generic.base import View
 
 from users.models import UserProfile, EmailVerifyRecord
-from .froms import LoginForm, RegisterForm
+from .froms import LoginForm, RegisterForm, ForgetForm
 from utils.email_send import send_register_email
 # Create your views here.
 
@@ -96,3 +96,18 @@ class CustomBackend(ModelBackend):
                 return user
         except Exception as e:
             return None
+
+#忘记密码
+class ForgetPwdView(View):
+    def get(self, request):
+        forget_form = ForgetForm()
+        return render(render, 'forgetpwd.html', {'forget_form': forget_form})
+
+    def post(self, request):
+        forget_form = ForgetForm()
+        if forget_form.is_valid():
+            email = request.POST.get('email', '')
+            send_register_email(email, 'forget')
+            return render(request, 'login.html', {'msg': '重置密码邮件已发送，请注意查收'})
+        else:
+            return render(request, 'forgetpwd.html', {'forget_form': forget_form})

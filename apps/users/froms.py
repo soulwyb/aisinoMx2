@@ -19,3 +19,8 @@ class ActiveForm(forms.Form):
 class LoginForm(forms.Form):
     username = forms.CharField(required=True)
     password = forms.CharField(required=True, min_length=5)
+
+#忘记密码表单
+class ForgetForm(forms.Form):
+    email = forms.EmailField(required = True)
+    captcha = CaptchaField(error_messages = {'invalid': u'验证码错误'})

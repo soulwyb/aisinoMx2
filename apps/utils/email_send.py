@@ -38,3 +38,11 @@ def send_register_email(email, send_type = 'register'):
 
         if send_status:
             pass
+    elif send_type == 'forget':
+        email_title = '吴玉斌小站 找回密码连接'
+        email_body = loader.render_to_string(
+            'email_forget.html',
+            {
+                'active_code': code
+            }
+        )
