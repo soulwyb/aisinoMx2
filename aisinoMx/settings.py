@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'organization',
     'operation',
     'xadmin',
-    'crispy_forms'
+    'crispy_forms',
+    'captcha'
 ]
 
 MIDDLEWARE = [
@@ -134,3 +135,13 @@ STATICFILES_DIRS = (
 )
 
 AUTH_USER_MODEL = 'users.UserProfile'
+AUTHENICATION_BACKENDS = (
+    'users.views.CustomBackend',
+)
+
+EMAIL_HOST = 'smtp.163.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = 'soulwyb@qq.com'
+EMAIL_HOST_PASSWORD = '116515483'
+EMAIL_USE_TLS = True
+EMAIL_FROM = '吴玉斌'
