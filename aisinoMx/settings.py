@@ -145,3 +145,6 @@ EMAIL_HOST_USER = 'soulwyb@163.com'
 EMAIL_HOST_PASSWORD = 'aisino123'
 EMAIL_USE_TLS = True
 EMAIL_FROM = 'soulwyb@163.com'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

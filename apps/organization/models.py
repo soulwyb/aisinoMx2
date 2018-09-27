@@ -21,8 +21,14 @@ class CityDict(models.Model):
 
 #课程机构
 class CourseOrg(models.Model):
+    ORG_CHOICES = (
+        ('pxig', u'培训机构'),
+        ('gx', u'高校'),
+        ('gr', u'个人'),
+    )
     name = models.CharField(max_length=50, verbose_name=u'机构名称')
     desc = models.TextField(max_length=u'机构描述')
+    category = models.CharField(max_length=20, choices= ORG_CHOICES, verbose_name=u'机构类别', default= 'pxig')
     click_num = models.IntegerField(default=0, verbose_name=u'点击数')
     fav_num = models.IntegerField(default=0, verbose_name=u'收藏数')
     image = models.ImageField(
