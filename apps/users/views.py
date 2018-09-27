@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.views.generic.base import View
 
 from users.models import UserProfile, EmailVerifyRecord
-from .froms import LoginForm, RegisterForm, ForgetForm
+from .froms import LoginForm, RegisterForm, ForgetForm, ActiveForm, ModifyPwdForm
 from utils.email_send import send_register_email
 # Create your views here.
 
@@ -19,7 +19,9 @@ class RegisterView(View):
     def post(self, request):
         register_form = RegisterForm(request.POST)
         if register_form.is_valid():
-            user_name = request.POST.get('username', '')
+            user_name = request.POST.get('email', '')
+            if UserProfile.objects.filter(email = user_name):
+                return render(request, 'register.html', {'register_form': register_form, 'msg': '用户已存在'})
             pass_word = request.POST.get('password', '')
 
             user_profile = UserProfile()
@@ -32,6 +34,8 @@ class RegisterView(View):
             send_register_email(user_name, 'register')
 
             return render(request, 'login.html')
+        else:
+            return render(request, 'register.html', {'register_form': register_form})
 
 #用户激活
 class ActiveUserView(View):
@@ -63,8 +67,11 @@ class LoginView(View):
 
             user = authenticate(username = user_name, password = pass_word)
             if user is not None:
-                login(user)
-                return render(request, 'index.html')
+                if user.is_active:
+                    login(request, user)
+                    return render(request, 'index.html')
+                else:
+                    return render(request, 'login.html', {'msg': '用户名未激活，请前往邮箱进行激活'})
             else:
                 return render(request, 'login.html', {'msg': '用户名或密码错误'})
 
@@ -101,13 +108,45 @@ class CustomBackend(ModelBackend):
 class ForgetPwdView(View):
     def get(self, request):
         forget_form = ForgetForm()
-        return render(render, 'forgetpwd.html', {'forget_form': forget_form})
+        return render(request, 'forgetpwd.html', {'forget_form': forget_form})
 
     def post(self, request):
-        forget_form = ForgetForm()
+        forget_form = ForgetForm(request.POST)
         if forget_form.is_valid():
             email = request.POST.get('email', '')
             send_register_email(email, 'forget')
             return render(request, 'login.html', {'msg': '重置密码邮件已发送，请注意查收'})
         else:
             return render(request, 'forgetpwd.html', {'forget_form': forget_form})
+
+#重置密码
+class ResetView(View):
+    def get(self, request, active_code):
+        all_recode = EmailVerifyRecord.objects.filter(code = active_code)
+        active_form = ActiveForm(request.GET)
+        if all_recode:
+            EmailVerifyRecord.objects.filter(code = active_code).delete()
+            for recode in all_recode:
+                email = recode.email
+                return render(request, 'password_reset.html', {'email':email})
+        else:
+            return render(request, 'forgetpwd.html', {'msg': '您的重置密码连接无效，请重新请求', 'active_form': active_form})
+
+#修改密码
+class ModifyPwdView(View):
+    def post(self, request):
+        modifypwd_form = ModifyPwdForm(request.POST)
+        if modifypwd_form.is_valid():
+            pwd1 = request.POST.get('password1', '')
+            pwd2 = request.POST.get('password2', '')
+            email = request.POST.get('email', '')
+
+            if pwd1 != pwd2:
+                return render(request, 'password_reset.html', {'msg': '密码不一致，请重新输入'})
+            user = UserProfile.objects.get(email = email)
+            user.password = make_password(pwd1)
+            user.save()
+            return render(request, 'login.html', {'msg': '密码修改成功，请登录'})
+        else:
+            email = request.POST.get('email', '')
+            return render(request, 'password_reset.html', {'email': email, 'modiypwd_form': modifypwd_form})

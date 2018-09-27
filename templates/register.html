@@ -144,11 +144,13 @@
                         <div class="form-group marb8 captcha1 ">
                             <label>验&nbsp;证&nbsp;码</label>
                             {{ register_form.captcha }}
+                            {{ active_form.captcha }}
                         </div>
                         <div class="error btns" id="jsEmailTips">
                             {% for key, error in register_form.errors.items %}
                             {{ error }}
                             {% endfor %}
+                            {{ msg }}
                         </div>
                         <div class="auto-box marb8">
                         </div>
