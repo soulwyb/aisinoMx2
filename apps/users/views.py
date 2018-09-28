@@ -140,7 +140,6 @@ class ModifyPwdView(View):
             pwd1 = request.POST.get('password1', '')
             pwd2 = request.POST.get('password2', '')
             email = request.POST.get('email', '')
-
             if pwd1 != pwd2:
                 return render(request, 'password_reset.html', {'msg': '密码不一致，请重新输入'})
             user = UserProfile.objects.get(email = email)

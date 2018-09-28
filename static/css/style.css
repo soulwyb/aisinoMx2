@@ -1990,6 +1990,7 @@ textarea:focus {
 }
 
 .active2 {
+
     color: #3d9328 !important;
 }
 
@@ -8589,7 +8590,9 @@ table .upload-btn {
 }
 
 .scrollLoading {
+    /*
     background: url(../images/rolling.gif) no-repeat center center #fff !important;
+    */
 }
 
 .evl-dialog h1 {

@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'operation',
     'xadmin',
     'crispy_forms',
-    'captcha'
+    'captcha',
+    'pure_pagination'
 ]
 
 MIDDLEWARE = [
@@ -71,6 +72,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media'
             ],
         },
     },
@@ -138,13 +140,22 @@ AUTH_USER_MODEL = 'users.UserProfile'
 AUTHENICATION_BACKENDS = (
     'users.views.CustomBackend',
 )
-
+#邮箱
 EMAIL_HOST = 'smtp.163.com'
 EMAIL_PORT = 25
 EMAIL_HOST_USER = 'soulwyb@163.com'
 EMAIL_HOST_PASSWORD = 'aisino123'
 EMAIL_USE_TLS = True
 EMAIL_FROM = 'soulwyb@163.com'
-
+#自己上传的文件
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+#分页
+PAGINATION_SETTINGS = {
+    #总共会显示多少page
+    'PAGE_RANGE_DISPLAYED':10,
+    #左右两边显示多少
+    'MARGIN_PAGES_DISPLAYED':2,
+    #如果页数不合法是否跳到第一页
+    'SHOW_FIRST_PAGE_WHEN_INVALID': True,
+}
