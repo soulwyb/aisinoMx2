@@ -29,7 +29,7 @@ class CourseOrg(models.Model):
     name = models.CharField(max_length=50, verbose_name=u'机构名称')
     desc = models.TextField(verbose_name =u'机构描述')
     category = models.CharField(max_length=20, choices= ORG_CHOICES, verbose_name=u'机构类别', default= 'pxig')
-    student = models.IntegerField(default=0, verbose_name=u'学习人数')
+    students = models.IntegerField(default=0, verbose_name=u'学习人数')
     course_nums = models.IntegerField(default=0, verbose_name=u'课程数')
     click_num = models.IntegerField(default=0, verbose_name=u'点击数')
     fav_num = models.IntegerField(default=0, verbose_name=u'收藏数')
@@ -60,6 +60,13 @@ class Teacher(models.Model):
     click_num = models.IntegerField(default=0, verbose_name=u'点击数')
     fav_num = models.IntegerField(default=0, verbose_name=u'收藏数')
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u'添加时间')
+    age = models.IntegerField(default=18, verbose_name=u'年龄')
+    image = models.ImageField(
+        default='',
+        upload_to='teachet/%Y/%m',
+        verbose_name=u'头像',
+        max_length=100
+    )
 
     class Meta:
         verbose_name = u'教师'

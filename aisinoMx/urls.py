@@ -21,7 +21,7 @@ from .settings import MEDIA_ROOT
 from django.views.static import serve
 
 from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, ResetView, ModifyPwdView
-from organization.views import OrgView
+from organization.views import OrgView, OrgHomeView
 
 
 urlpatterns = [
@@ -37,7 +37,11 @@ urlpatterns = [
     path('modify_pwd/', ModifyPwdView.as_view(), name = 'modify_pwd'),
 
     #机构
-    path('org_list/', OrgView.as_view(), name = 'org_list'),
+    #path('org_list/', OrgView.as_view(), name = 'org_list'),
+    path('org/', include('organization.urls', namespace='org')),
     #server是django自带的，用来将media的路径给Django，让他去找到图片返回回去
-    re_path('media/(?P<path>.*)', serve, {'document_root': MEDIA_ROOT})
+    re_path('media/(?P<path>.*)', serve, {'document_root': MEDIA_ROOT}),
+
+    #公开课
+    path('course/', include('courses.urls', namespace='course'))
 ]
