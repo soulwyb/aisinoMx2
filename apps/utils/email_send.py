@@ -52,3 +52,13 @@ def send_register_email(email, send_type = 'register'):
         msg = EmailMessage(email_title, email_body, EMAIL_FROM, [email])
         msg.content_subtype = 'html'
         send_status = msg.send()
+    elif send_type == 'update_email':
+        code = random_str(4)
+        email_title = '吴玉斌 修改邮箱验证码'
+        email_body = render_to_string(
+            'email_update_email.html',
+            {'active_code': code}
+        )
+        msg = EmailMessage(email_title, email_body, EMAIL_FROM, [email])
+        msg.content_subtype = 'html'
+        send_status = msg.send()

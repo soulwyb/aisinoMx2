@@ -34,6 +34,7 @@ class Course(models.Model):
     teacher = models.ForeignKey(Teacher, verbose_name=u'讲师', null = True, blank=True, on_delete=models.CASCADE)
     you_need_know = models.CharField(max_length=300, default=u'一颗勤学的心是本课程必要前提', verbose_name=u'课程须知')
     teacher_tell = models.CharField(max_length=300, default=u'按时交作业，不然叫家长', verbose_name=u'老师告诉你')
+    is_banner = models.BooleanField(default=False, verbose_name=u'是否轮播')
 
     class Meta:
         verbose_name = u'课程信息'

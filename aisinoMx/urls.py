@@ -20,14 +20,15 @@ from extra_apps import xadmin
 from .settings import MEDIA_ROOT
 from django.views.static import serve
 
-from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, ResetView, ModifyPwdView
-from organization.views import OrgView, OrgHomeView
+from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, ResetView, ModifyPwdView, IndexView
+from organization.views import OrgView, OrgHomeView, TeacherListView, TeacherDetailView
 
 
 urlpatterns = [
     #path('admin/', admin.site.urls),
     path('xadmin/', xadmin.site.urls),
-    path('', TemplateView.as_view(template_name='index.html'), name = 'index'),
+    #path('', TemplateView.as_view(template_name='index.html'), name = 'index'),
+    path('', IndexView.as_view(), name = 'index'),
     path('login/', LoginView.as_view(), name = 'login'),
     path('register/', RegisterView.as_view(), name = 'register'),
     path('captcha/', include('captcha.urls')),
@@ -43,5 +44,11 @@ urlpatterns = [
     re_path('media/(?P<path>.*)', serve, {'document_root': MEDIA_ROOT}),
 
     #公开课
-    path('course/', include('courses.urls', namespace='course'))
+    path('course/', include('courses.urls', namespace='course')),
+    #教师列表
+    path('teacher_list/', TeacherListView.as_view(), name = 'teacher_list'),
+    re_path('teacher/detail/(?P<teacher_id>\d+)/', TeacherDetailView.as_view(), name = 'teacher_detail'),
+    path('user/', include('users.urls', namespace = 'user'))
 ]
+
+handler404 = 'user.views.page_not_found'

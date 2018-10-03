@@ -41,6 +41,7 @@ class CourseOrg(models.Model):
     address = models.CharField(max_length=150, verbose_name=u'机构地址')
     city = models.ForeignKey(CityDict, verbose_name=u'所在城市', on_delete=models.CASCADE)
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u'添加时间')
+    tag = models.CharField(max_length=10, default=u'国内名校', verbose_name=u'机构标签')
 
     class Meta:
         verbose_name = u'课程机构'

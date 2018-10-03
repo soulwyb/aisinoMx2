@@ -3,7 +3,7 @@ from django.views.generic import View
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.db.models import Q
 from .models import Course, CourseResource, Video
 from operation.models import UserFavorite, CourseComments, UserCourse
 
@@ -13,6 +13,10 @@ from operation.models import UserFavorite, CourseComments, UserCourse
 class CourseListView(View):
     def get(self, request):
         all_course = Course.objects.all()
+
+        search_keywords = request.GET.get('keywords','')
+        if search_keywords:
+            all_course = all_course.filter(Q(name__icontains=search_keywords) | Q(desc__icontains=search_keywords) |Q(detail__icontains=search_keywords))
 
         sort = request.GET.get('sort', '')
         if sort:
@@ -31,7 +35,8 @@ class CourseListView(View):
         return render(request, 'course-list.html', {
             'all_course': courses,
             'sort': sort,
-            'hot_courses': hot_course
+            'hot_courses': hot_course,
+            'search_keywords':search_keywords
         })
 
 #课程详情
@@ -68,7 +73,12 @@ class CourseInfoView(View, LoginRequiredMixin):
     def get(self, request, course_id):
         course = Course.objects.get(id = int(course_id))
         all_resources = CourseResource.objects.filter(course = course)
-        user_courses = UserCourse.objects.filter(course = course)
+        user_courses = UserCourse.objects.filter(course = course, user = request.user)
+        if not user_courses:
+            user_course = UserCourse(user = request.user, course = course)
+            course.students += 1
+            course.save()
+            user_course.save()
         user_ids = [user_course.user.id for user_course in user_courses]
         all_user_courses = UserCourse.objects.filter(user_id__in = user_ids)
         course_ids = [all_user_course.course.id for all_user_course in all_user_courses]

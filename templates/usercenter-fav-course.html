@@ -1,0 +1,54 @@
+{% extends 'usercenter-base.html' %}
+{% block title %}收藏课程|吴玉斌{% endblock %}
+{% load staticfiles %}
+{% block custom_bread %}
+<!--crumbs start-->
+<section>
+    <div class="wp">
+        <ul  class="crumbs">
+            <li><a href="index.html">首页</a>></li>
+            <li><a href="/user/home/">个人中心</a>></li>
+            <li>我的收藏</li>
+        </ul>
+    </div>
+</section>
+{% endblock %}
+{% block right_content %}
+        <div class="right" >
+            <div class="personal_des Releasecont">
+                <div class="head">
+                    <h1>我的收藏</h1>
+                </div>
+            </div>
+            <div class="personal_des permessage">
+                <div class="head">
+                    <ul class="tab_header messagehead">
+                        <li><a href="usercenter-fav-org.html">课程机构</a> </li>
+                        <li ><a href="usercenter-fav-teacher.html">授课教师 </a></li>
+                        <li class="active"><a href="usercenter-fav-course.html">公开课程</a></li>
+                    </ul>
+
+                </div>
+                <div class="companycenter">
+                    <div class="group_list brief">
+                        {% for course in course_list %}
+                        <div class="module1_5 box">
+                            <a href="/group/groupdetail/13/">
+                                <img width="214" height="190" class="scrollLoading" data-url="../images/mysql.jpg" src="../images/pixel.gif"/>
+                            </a>
+                            <div class="des">
+                                <a href="/group/groupdetail/13/"><h2>mysql从入门到精通</h2></a>
+                                <span class="fl">价格：<i class="key">免费</i></span>
+                                <span class="fr">学习人数：1000</span>
+                            </div>
+                            <div class="bottom">
+                                <span class="fl">慕课网</span>
+                                <span class="delete-group fr jsDeleteFav" data-favid="{{ course.id }}"></span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
