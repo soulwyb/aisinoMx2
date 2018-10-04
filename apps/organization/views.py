@@ -208,7 +208,7 @@ class TeacherListView(View):
         #从all_orgs中取5个数据， 每页显示5个
         p = Paginator(all_teacher, 3, request = request)
         orgs = p.page(page)
-        rank_teacher = Teacher.objects.all().order_by('-fav_nums')[:5]
+        rank_teacher = Teacher.objects.all().order_by('-fav_num')[:5]
         return render(request, 'teachers-list.html', {
             'all_teacher':all_teacher,
             'teacher_nums':teacher_nums,
